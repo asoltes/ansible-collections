@@ -1,0 +1,15 @@
+- hosts: all
+  gather_facts: true
+  become: true
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+  vars_files: 
+    - roles/create_user/vars/users.yml
+    - roles/create_user/defaults/{{ ansible_facts['distribution']|lower }}.yml
+
+  roles:
+    - create_user
+    
+
+    

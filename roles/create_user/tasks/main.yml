@@ -1,0 +1,90 @@
+# user creation for linux distributions declared in defaults folder
+- name: create user | upload ssh_public_key | create sudoers file
+  block:
+    - name: create superuser | linux machine
+      tags: sudoers
+      user:
+        name: "{{ item.username }}"
+        password: "{{ 'n0csolaire' | password_hash('sha512') }}"
+        createhome: yes
+        shell: /bin/bash
+        groups:
+          - "{{ sudoers_group }}"
+        update_password: on_create
+      with_items:
+        - "{{ super_users }}"
+
+    # copy pubkey to user .ssh/authorized_keys
+    - name: upload ssh key | copy public key to user .ssh/authorized_keys
+      tags: sudoers
+      register: command_result
+      authorized_key:
+        manage_dir: yes
+        user: "{{item.username}}"
+        key: "{{lookup('file', 'roles/create_user/pubkeys/{{item.username}}.pub')}}"
+      with_items:
+        - "{{ super_users }}"
+
+    # create sudoers file to /etc/sudoers.d
+    - name: create sudoers | create sudoers file
+      tags: sudoers
+      lineinfile:
+        path: /etc/sudoers.d/{{ item.username}}
+        regexp: "^{{ item.username }}"
+        line: "{{ item.username }} ALL=(ALL) NOPASSWD:ALL"
+        create: yes
+      with_items:
+        - "{{ super_users }}"
+
+- name : delete user | delete user home directory | delete sudoers file.
+  block:
+    # delete users in linux servers
+    - name: delete | inactive and unwanted users in linux.
+      tags: remove_users
+      user:
+        name: "{{ item.username }}"
+        state: absent
+        # remove: yes       # Remove home user if yes; default no
+        # force: yes        # works with remove is yes
+      with_items: "{{ remove_users }}"
+
+    # delete user home dir
+    - name: delete | user home directory
+      tags: remove_users
+      file:
+        state: absent
+        path: /home/{{item.username}}
+      with_items: "{{ remove_users }}"
+
+    # delete user sudoer file
+    - name: delete | user sudoer file from /etc/sudoers.d if existing.
+      tags: remove_users
+      file:
+        path: /etc/sudoers.d/{{ item.username }}
+        state: absent
+      with_items: "{{ remove_users }}"
+
+#create normal linux user with password
+- name: create normal | linux user with password
+  tags: normal
+  user:
+    name: "{{ item.username }}"
+    password: "{{ 'n0csolaire' | password_hash('sha512') }}"
+    createhome: yes
+    shell: /bin/bash
+    update_password: on_create
+  with_items:
+    - "{{ normal_users }}"
+
+# add user to groups
+- name: add user | to existing groups in linux
+  tags: add_groups
+  user:
+    name: "{{item.username}}"
+    groups: 
+      - docker
+      # - ansible
+    append: yes
+  with_items: 
+    - "{{ super_users }}"
+    # - "{{ normal_users }}"

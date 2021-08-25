@@ -1,0 +1,11 @@
+#edit base on your task
+
+super_users:
+  - username: asoltes
+  - username: ansible
+  
+normal_users:
+  - username: normalguy
+
+remove_users:
+  - username: normalguy
