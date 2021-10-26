@@ -1,0 +1,6 @@
+---
+# defaults file for docker-zabbix
+
+zabbix_branch_version: "5.0"
+docker_compose_dir: /opt/docker-zabbix/
+zabbix_compose_file: docker-compose_v3_alpine_mysql_latest.yml

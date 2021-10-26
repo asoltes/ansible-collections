@@ -1,0 +1,46 @@
+# tasks file for docker-cacti
+
+- name: Install git
+  apt:
+    name: git
+    state: present
+    update_cache: yes
+
+- name: Install docker-compose python package
+  pip:
+    name: docker-compose
+
+- name: Install docker python package
+  pip:
+    name: docker
+
+- name: Ensure Docker is started and enabled at boot.
+  when: daemon|default(true)
+  service:
+    name: docker
+    state: started
+
+- name: cloning docker-cacti repository please wait ... 
+  ansible.builtin.git:
+    repo: https://github.com/scline/docker-cacti.git
+    dest: /opt/docker-cacti
+    version: master
+    force: yes
+  become: true
+
+- name: changing default sensitive environment variables value
+  template:
+    src: cacti_single_install.j2
+    dest: '{{ docker_compose_dir }}/{{ cacti_deployment }}'
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+
+- name: bringing up cacti containers by "docker-compose -f {{ cacti_deployment }} up -d"
+  community.docker.docker_compose:
+    project_src: '{{ docker_compose_dir }}'
+    files: '{{ cacti_deployment }}'
+    build: no #set to yes on first run
+  register: output
+

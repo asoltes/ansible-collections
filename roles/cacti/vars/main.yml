@@ -1,0 +1,14 @@
+---
+#change the parameters for secured environment
+ansible_python_interpreter: /usr/bin/python3
+#environment db vars -- will edit docker-compose/cacti_single_install.yml
+db_name: cacti_master
+db_user: cactiuser
+db_password: cactipassword
+root_db_password: rootpassword
+time_zone: Asia/Manila
+
+#container vars -- will edit docker-compose/cacti_single_install.yml
+container_name: cacti
+domain: example.com
+hostname: cacti

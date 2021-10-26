@@ -1,4 +1,5 @@
-#edit base on your task
+---
+# vars file for user
 
 super_users:
   - username: asoltes
@@ -9,3 +10,6 @@ normal_users:
 
 remove_users:
   - username: normalguy
+  - username: dadwa
+
+

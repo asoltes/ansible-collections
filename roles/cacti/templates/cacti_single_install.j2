@@ -1,0 +1,67 @@
+version: '2'
+services:
+
+
+  cacti:
+    image: "smcline06/cacti"
+    container_name: {{ container_name }}
+    domainname: {{ domain }}
+    hostname: {{ hostname }}
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DB_NAME={{ db_name }}
+      - DB_USER={{ db_user }}
+      - DB_PASS={{ db_password }}
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_ROOT_PASS={{ root_db_password }}
+      - INITIALIZE_DB=1
+      - TZ={{time_zone}}
+    volumes:
+      - cacti-data:/cacti
+      - cacti-spine:/spine
+      - cacti-backups:/backups
+    links:
+      - db
+
+
+  db:
+    image: "mariadb:10.3"
+    container_name: cacti_db
+    domainname: example.com
+    hostname: db
+    ports:
+      - "3306:3306"
+    command:
+      - mysqld
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --max_connections=200
+      - --max_heap_table_size=128M
+      - --max_allowed_packet=32M
+      - --tmp_table_size=128M
+      - --join_buffer_size=128M
+      - --innodb_buffer_pool_size=1G
+      - --innodb_doublewrite=ON
+      - --innodb_flush_log_at_timeout=3
+      - --innodb_read_io_threads=32
+      - --innodb_write_io_threads=16
+      - --innodb_buffer_pool_instances=9
+      - --innodb_file_format=Barracuda
+      - --innodb_large_prefix=1
+      - --innodb_io_capacity=5000
+      - --innodb_io_capacity_max=10000
+    environment:
+      - MYSQL_ROOT_PASSWORD={{ root_db_password }}
+      - TZ={{time_zone}}
+    volumes:
+      - cacti-db:/var/lib/mysql
+
+
+volumes:
+  cacti-db:
+  cacti-data:
+  cacti-spine:
+  cacti-backups:

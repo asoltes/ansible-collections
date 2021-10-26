@@ -1,0 +1,76 @@
+# tasks file for docker-zabbix
+- name: cloning docker-zabbix repository please wait ... 
+  ansible.builtin.git:
+    repo: https://github.com/zabbix/zabbix-docker.git
+    dest: /opt/docker-zabbix
+    version: '{{ zabbix_branch_version }}'
+    force: yes
+  become: true
+
+- name: changing default sensitive environment variables value
+  template:
+    src: docker-compose_v3_alpine_mysql_latest.j2
+    dest: '{{ docker_compose_dir }}/{{ zabbix_compose_file }}'
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+
+- name: copying Dockerfile to /opt/docker-zabbix/Dockerfiles/server-mysql/alpine
+  template:
+    src: Dockerfile
+    dest: '/opt/docker-zabbix/Dockerfiles/server-mysql/alpine$'
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+
+# - name: Build image and with build args
+#   command: /opt/docker-zabbix/Dockerfiles/server-mysql/alpine/build.sh .
+#   become: true
+
+- name: Build image and with build args
+  community.docker.docker_image:
+    name: zabbix-build-mysql:alpine-5.4.6
+    build:
+      path: /opt/docker-zabbix/Dockerfiles/server-mysql/alpine
+    source: build
+  become: true
+
+- name: bringing up zabbix containers by "docker-compose -f {{ zabbix_compose_file }} up -d "
+  community.docker.docker_compose:
+    project_src: '{{ docker_compose_dir }}'
+    files: '{{ zabbix_compose_file }}'
+
+- name: Unarchive a file that needs to be downloaded (SQL Partitioning Script)
+  ansible.builtin.unarchive:
+    src: http://bestmonitoringtools.com/dl/zbx_db_partitiong.tar.gz
+    dest: /opt/docker-zabbix
+    remote_src: yes
+  become: true
+
+- name: uploading mysql script to zabbix database
+  community.docker.docker_container_exec:
+    container: docker-zabbix_mysql-server_1
+    command: /bin/bash -c mysql -u 'root'  zabbix < /opt/docker-zabbix/zbx_db_partitiong.sql
+  register: result
+  failed_when: false
+  no_log: True
+  ignore_errors: true
+
+- name: Creating scheduled partition in cron.daily
+  copy:
+    dest: "/etc/cron.daily/dbpartition"
+    content: |
+      docker exec docker-zabbix_mysql-server_1 mysql -u 'zabbix' -p'zabbix' zabbix -e "CALL partition_maintenance_all('zabbix');" > /tmp/partition.log 2>&1
+  become: true
+  
+- name: setting up slack notifications
+  copy:
+    dest: "/opt/docker-zabbix/zbx_env/usr/lib/zabbix/alertscripts/slackalert.sh"
+    content: |
+        #!/bin/bash
+        curl -X POST -H 'Content-type: application/json' --data '{"text":"'"$1"'"}' https://hooks.slack.com/services/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
+  become: true
+
+

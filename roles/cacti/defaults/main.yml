@@ -1,0 +1,8 @@
+---
+# defaults file for docker-cacti
+#docker-compose default directory
+docker_compose_dir: /opt/docker-cacti/docker-compose
+
+#cacti docker default deployment
+#SELECT: cacti_multi.yml | cacti_multi_shared.yml | cacti_testing.yml | cacti_single_install.yml
+cacti_deployment: cacti_single_install.yml

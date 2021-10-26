@@ -1,0 +1,11 @@
+# NOTE: change the default environ variables go to /roles/docker-cacti/vars/main.yml
+- hosts: localhost
+  vars:
+    pip_install_packages:
+      - name: docker
+
+  roles:
+    # - geerlingguy.pip
+    # - geerlingguy.git
+    - docker-cacti
+    # - docker-zabbix

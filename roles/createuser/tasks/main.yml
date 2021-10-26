@@ -21,7 +21,7 @@
       authorized_key:
         manage_dir: yes
         user: "{{item.username}}"
-        key: "{{lookup('file', 'roles/create_user/pubkeys/{{item.username}}.pub')}}"
+        key: "{{lookup('file', '{{item.username}}.pub')}}"
       with_items:
         - "{{ super_users }}"
 
@@ -53,7 +53,7 @@
       tags: remove_users
       file:
         state: absent
-        path: /home/{{item.username}}
+        path: /home/{{ item.username }}
       with_items: "{{ remove_users }}"
 
     # delete user sudoer file
@@ -80,9 +80,9 @@
 - name: add user | to existing groups in linux
   tags: add_groups
   user:
-    name: "{{item.username}}"
+    name: "{{ item.username }}"
     groups: 
-      - docker
+      # - docker
       # - ansible
     append: yes
   with_items: 
