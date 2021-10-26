@@ -64,13 +64,5 @@
     content: |
       docker exec docker-zabbix_mysql-server_1 mysql -u 'zabbix' -p'zabbix' zabbix -e "CALL partition_maintenance_all('zabbix');" > /tmp/partition.log 2>&1
   become: true
-  
-- name: setting up slack notifications
-  copy:
-    dest: "/opt/docker-zabbix/zbx_env/usr/lib/zabbix/alertscripts/slackalert.sh"
-    content: |
-        #!/bin/bash
-        curl -X POST -H 'Content-type: application/json' --data '{"text":"'"$1"'"}' https://hooks.slack.com/services/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
-  become: true
 
 
