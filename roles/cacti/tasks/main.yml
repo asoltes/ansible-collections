@@ -14,11 +14,11 @@
   pip:
     name: docker
 
-- name: Ensure Docker is started and enabled at boot.
-  when: daemon|default(true)
-  service:
-    name: docker
-    state: started
+# - name: Ensure Docker is started and enabled at boot.
+#   when: daemon|default(true)
+#   service:
+#     name: docker
+#     state: started
 
 - name: cloning docker-cacti repository please wait ... 
   ansible.builtin.git:

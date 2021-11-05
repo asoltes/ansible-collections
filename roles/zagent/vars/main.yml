@@ -1,0 +1,4 @@
+---
+# vars file for zagent
+zabbix_server: zabbix.theorynomi.com
+metadataItem: system.sw.os[short]

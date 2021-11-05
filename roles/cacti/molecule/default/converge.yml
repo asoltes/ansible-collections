@@ -9,6 +9,6 @@
   roles:
     - geerlingguy.pip
     - geerlingguy.git
-    # - geerlingguy.docker
+    - geerlingguy.docker
     - cacti
 

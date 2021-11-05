@@ -1,0 +1,27 @@
+---
+# tasks file for zagent
+
+- name: installing zabbix-agent
+  package:
+    name: zabbix-agent2
+    state: present
+  become: true
+
+- name: uploading zabbix-agent config file
+  template:
+    src: zabbix_agent2.j2
+    dest: /etc/zabbix/zabbix_agent2.conf
+  become: true
+
+- name: restart zabbix-agent for the new config to take effect
+  service:
+    name: zabbix-agent2
+    state: restarted
+  become: true
+
+- name: ensure the service zabbix-agent started and enabled on boot
+  service:
+    name: zabbix-agent2
+    state: started
+    enabled: yes
+  become: true
