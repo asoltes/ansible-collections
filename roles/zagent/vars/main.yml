@@ -1,4 +1,4 @@
 ---
 # vars file for zagent
-zabbix_server: zabbix.theorynomi.com
+zabbix_server: zabbix.orientalgroup.com
 metadataItem: system.sw.os[short]
