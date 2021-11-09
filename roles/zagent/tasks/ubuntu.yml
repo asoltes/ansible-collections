@@ -16,7 +16,7 @@
 - name: ensure zabbix-agent2 installed
   apt:
    update_cache: yes
-  when: ansible_facts['distribution'] == "Ubuntu"
+  when: ansible_facts['distribution'] == "Ubuntu" and ansible_facts['distribution_major_version'] == "20"
   become: true
 
 # UBUNTU-18.04
@@ -37,7 +37,7 @@
 - name: ensure zabbix-agent2 installed
   apt:
    update_cache: yes
-  when: ansible_facts['distribution'] == "Ubuntu"
+  when: ansible_facts['distribution'] == "Ubuntu" and ansible_facts['distribution_major_version'] == "18"
   become: true
 
 

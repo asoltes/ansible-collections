@@ -13,12 +13,12 @@
     dest: /etc/zabbix/zabbix_agent2.conf
   become: true
 
-# - name: restart zabbix-agent and daemon to take effect.
-#   ansible.builtin.systemd:
-#     state: restarted
-#     daemon_reload: yes
-#     name: zabbix-agent2
-#   become: true
+- name: restart zabbix-agent and daemon to take effect.
+  ansible.builtin.systemd:
+    state: restarted
+    daemon_reload: yes
+    name: zabbix-agent2
+  become: true
 
 - name: restart zabbix-agent for the new config to take effect
   service:
