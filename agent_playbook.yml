@@ -1,6 +1,6 @@
 ---
 - name: Install Zabbix Agent
-  hosts: localhost
+  hosts: all
   gather_facts: True
   tasks:
     - name: Performing Tasks for CentOS
