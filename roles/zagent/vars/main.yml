@@ -2,3 +2,5 @@
 # vars file for zagent
 zabbix_server: zabbix.orientalgroup.com
 metadataItem: system.sw.os[short]
+zabbix_user: zabbix
+docker_group: docker

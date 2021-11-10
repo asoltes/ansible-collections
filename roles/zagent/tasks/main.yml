@@ -13,18 +13,19 @@
     dest: /etc/zabbix/zabbix_agent2.conf
   become: true
 
-- name: restart zabbix-agent and daemon to take effect.
+- name: restart zabbix-agent and daemon for changes  take effect.
   ansible.builtin.systemd:
     state: restarted
     daemon_reload: yes
     name: zabbix-agent2
   become: true
 
-- name: restart zabbix-agent for the new config to take effect
-  service:
-    name: zabbix-agent2
-    state: restarted
-  become: true
+- name: adding existing user "{{ zabbix_user }}" to docker group
+  user:
+    name: "{{ zabbix_user }}"
+    groups: {{ docker_group  }}
+    append: yes
+  become: yes
 
 - name: ensure the service zabbix-agent started and enabled on boot
   service:
