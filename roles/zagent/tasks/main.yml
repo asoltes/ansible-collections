@@ -20,10 +20,10 @@
     name: zabbix-agent2
   become: true
 
-- name: adding existing user {{ zabbix_user }} to docker group
+- name: adding existing user "{{ zabbix_user }}" to docker group
   user:
-    name: {{ zabbix_user }}
-    groups: {{ docker_group  }}
+    name: "{{ zabbix_user }}"
+    groups: "{{ docker_group  }}"
     append: yes
   become: yes
 
