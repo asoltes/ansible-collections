@@ -26,6 +26,10 @@
     groups: "{{ docker_group  }}"
     append: yes
   become: yes
+- name: change permission to /var/run/docker.sock/
+  ansible.builtin.file:
+    path: /var/run/docker.sock
+    mode: '666'
 
 - name: ensure the service zabbix-agent started and enabled on boot
   service:
