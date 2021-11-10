@@ -1,23 +1,9 @@
 ---
 # tasks file for zagent
-
 - name: installing zabbix-agent
   package:
     name: zabbix-agent2
     state: present
-  become: true
-
-- name: uploading zabbix-agent config file
-  template:
-    src: zabbix_agent2.j2
-    dest: /etc/zabbix/zabbix_agent2.conf
-  become: true
-
-- name: restart zabbix-agent and daemon for changes  take effect.
-  ansible.builtin.systemd:
-    state: restarted
-    daemon_reload: yes
-    name: zabbix-agent2
   become: true
 
 - name: adding existing user "{{ zabbix_user }}" to docker group
@@ -26,10 +12,24 @@
     groups: "{{ docker_group  }}"
     append: yes
   become: yes
-- name: change permission to /var/run/docker.sock/
-  ansible.builtin.file:
-    path: /var/run/docker.sock
-    mode: '666'
+  
+- name: uploading zabbix-agent config file
+  template:
+    src: zabbix_agent2.j2
+    dest: /etc/zabbix/zabbix_agent2.conf
+  become: true
+
+- name: restart zabbix-agent and daemon for changes  take effect.
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: zabbix-agent2
+  become: true
+
+# - name: change permission to /var/run/docker.sock/
+#   file:
+#     path: /var/run/docker.sock
+#     mode: '666'
 
 - name: ensure the service zabbix-agent started and enabled on boot
   service:
