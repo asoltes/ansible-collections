@@ -1,31 +1,40 @@
-Role Name
+Zabbix Agent Installation
 =========
 
-A brief description of the role goes here.
+ansible role for zabbix agent installation
 
 Requirements
 ------------
+* Zabbix-Server
+* Docker
+* Ansible 2.11.6
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Tested In Linux OS
+------------
+* Centos 7 
+* Centos 8
+* Ubuntu 18.04
+* Ubuntu 20.04
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+* zabbix_server: zabbix-server domain or ip address
+* metadataItem: system.sw.os[short]
+* zabbix_user: zabbix
+* docker_group: docker
 
-Dependencies
-------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
 
 Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
+    - hosts: all
+      gather_facts: True
       roles:
-         - { role: username.rolename, x: 42 }
+         - zagent
 
 License
 -------
@@ -35,4 +44,4 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Andrew Soltes

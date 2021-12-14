@@ -2,11 +2,11 @@
 - name: Converge
   hosts: all
   tasks:
-    # - name: Performing Tasks for CentOS
-    #   include_tasks: centos.yml
+    - name: Performing Tasks for CentOS
+      include_tasks: centos.yml
       
-    # - name: Performing Tasks for Ubuntu
-    #   include_tasks: ubuntu.yml
+    - name: Performing Tasks for Ubuntu
+      include_tasks: ubuntu.yml
 
     - name: "Include zagent"
       include_role:

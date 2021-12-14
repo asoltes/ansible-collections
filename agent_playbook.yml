@@ -1,14 +1,5 @@
----
-- name: Install Zabbix Agent
-  hosts: all
+- hosts: localhost
   gather_facts: True
-  tasks:
-    - name: Performing Tasks for CentOS
-      include_tasks: ./roles/zagent/tasks/centos.yml
-      
-    - name: Performing Tasks for Ubuntu
-      include_tasks: ./roles/zagent/tasks/ubuntu.yml
 
-    - name: "Include zagent"
-      include_role:
-        name: "zagent"
+  roles:
+    - zagent

@@ -1,5 +1,12 @@
 ---
 # tasks file for zagent
+
+- name: Performing Tasks for CentOS
+  include_tasks: ./roles/zagent/tasks/centos.yml
+    
+- name: Performing Tasks for Ubuntu
+  include_tasks: ./roles/zagent/tasks/ubuntu.yml
+
 - name: installing zabbix-agent
   package:
     name: zabbix-agent2
