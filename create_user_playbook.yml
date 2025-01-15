@@ -9,6 +9,6 @@
     - roles/create_user/defaults/{{ ansible_facts['distribution']|lower }}.yml
 
   roles:
-    - create_user
+    - createuser
 
     
