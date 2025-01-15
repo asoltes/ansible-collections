@@ -2,11 +2,11 @@
 # vars file for user
 
 super_users:
-  # - username: asoltes
-  # - username: ansible
+  - username: asoltes
+  - username: ansible
   
 normal_users:
-  # - username: normalguy
+  - username: normalguy
 
 remove_users:
   - username: asoltes
