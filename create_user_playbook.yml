@@ -5,8 +5,8 @@
   #   ansible_python_interpreter: /usr/bin/python3
 
   vars_files: 
-    - roles/create_user/vars/users.yml
-    - roles/create_user/defaults/{{ ansible_facts['distribution']|lower }}.yml
+    - roles/createuser/vars/users.yml
+    - roles/createuser/defaults/{{ ansible_facts['distribution']|lower }}.yml
 
   roles:
     - createuser
